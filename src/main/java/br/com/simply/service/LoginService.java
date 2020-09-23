@@ -10,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 public class LoginService {
 	
 	public String realizaLogin(LoginRequest login) {
-		log.info("início do método realizaLogin() - LoginService");
+		log.info("Início do método realizaLogin() - LoginService");
 		String retorno = "Login realizado! usuário logado - " + login.getLogin();
 		log.info("Fim do método realizaLogin() - LoginService");
 		return retorno;
