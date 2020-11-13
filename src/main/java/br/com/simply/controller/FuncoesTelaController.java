@@ -16,7 +16,7 @@ public class FuncoesTelaController {
 	@GetMapping("/bancos")
 	public ResponseEntity<?> buscaBancos(){
 		bancosRepository.findAll();
-		return ResponseEntity.ok(bancosRepository.findAll());
+		return ResponseEntity.ok(bancosRepository.findAllbancos());
 	}
 	
 }

@@ -11,7 +11,7 @@ import br.com.simply.model.BancosEntity;
 @Repository
 public interface BancosRepository extends JpaRepository<BancosEntity, Long>{
 
-	@Query(value = "SELECT * FROM dbo.bancos", nativeQuery = true)
+	@Query(value = "SELECT * FROM bancos", nativeQuery = true)
 	public List<BancosEntity> findAllbancos();
 	
 }
