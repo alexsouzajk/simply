@@ -1,6 +1,8 @@
 package br.com.simply.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
@@ -8,14 +10,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name="login")
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoginModel {
-
-	private String login;
+@Data
+@Table(name="bancos")
+public class BancosEntity {
+	@Id
+	private Long codigo;
 	
-	private String senha;
-	
+	@Column(name="banco")
+	private String banco;
 }
