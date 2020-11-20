@@ -14,4 +14,7 @@ public interface BancosRepository extends JpaRepository<BancosEntity, Long>{
 	@Query(value = "SELECT * FROM bancos", nativeQuery = true)
 	public List<BancosEntity> findAllbancos();
 	
+	@Query(value = "SELECT COUNT(*) FROM conta_cliente WHERE id_cliente = 1", nativeQuery = true)
+	public int findTotalContas();
+	
 }

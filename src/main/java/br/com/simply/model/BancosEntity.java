@@ -6,15 +6,13 @@ import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@Table(name="dbo.bancos")
+@Table(name="bancos")
 public class BancosEntity {
 	@Id
 	private Long codigo;

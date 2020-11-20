@@ -11,7 +11,11 @@
 
     <title>Contas</title>
 </head>
-
+<style>
+    .none{
+        display: none;
+    }
+</style>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
@@ -35,7 +39,7 @@
         </div>
     </nav>
 
-    <div class="alert alert-danger" role="alert">
+    <div class="alert alert-danger" id="limiteQtdContas" role="alert">
         Limite máximo de contas: 3
     </div>
 
@@ -46,7 +50,6 @@
                 <table class="table">
                     <thead class="bg-dark text-white">
                         <tr>
-                            <th scope="col">#</th>
                             <th scope="col">Principal</th>
                             <th scope="col">Banco</th>
                             <th scope="col">Agencia</th>
@@ -54,61 +57,37 @@
                             <th scope="col">Remover</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                            <td>@mdo</td>
-                            <td><button type="button" id="excluir" class="btn btn-danger">excluir</button></td>
-                        </tr>
-                        <tr>
-                            <th scope="row">2</th>
-                            <td>Jacob</td>
-                            <td>Thornton</td>
-                            <td>@fat</td>
-                            <td>@mdo</td>
-                            <td><button type="button" id="excluir" class="btn btn-danger">excluir</button></td>
-                        </tr>
-                        <tr>
-                            <th scope="row">3</th>
-                            <td>Larry</td>
-                            <td>the Bird</td>
-                            <td>@twitter</td>
-                            <td>@mdo</td>
-                            <td><button type="button" id="excluir" class="btn btn-danger">excluir</button></td>
-                        </tr>
+                    <tbody id="tableBody">
                     </tbody>
                 </table>
             </div>
             <div class="col">
-                <form class="rounded border p-3">
+                <form class="rounded border p-3" id="form-conta">
                     <div id="formNovaConta" class="form-group">
-                        <label for="inputConta">Banco</label>
-                        <select id="inputConta" class="form-control">
+                        <label for="banco">Banco</label>
+                        <select id="banco" name="banco" class="form-control">
                                     <option selected>Selecione</option>
                                     <option>...</option>
                                 </select>
                     </div>
                     <div class="form-group">
                         <label for="agencia">Agencia</label>
-                        <input type="text" class="form-control" id="agencia" placeholder="0000">
+                        <input type="text" class="form-control" name="agencia" id="agencia" placeholder="0000">
                     </div>
                     <div class="form-group">
                         <label for="conta">Conta (com digito)</label>
-                        <input type="text" class="form-control" id="conta" placeholder="00000000-1">
+                        <input type="text" class="form-control" name="conta" id="conta" placeholder="00000000-1">
                     </div>
                     <div class="form-group">
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="checkConta">
-                            <label class="form-check-label" for="checkConta">
+                            <input class="form-check-input" type="checkbox" value="1" name="checkConta" id="checkConta">
+                            <label class="form-check-label" for="checkConta" >
                                         Conta principal
                                     </label>
                         </div>
                     </div>
                     <div class="form-group">
-                        <button type="submit" class="btn btn-primary">Cadastrar</button>
+                        <button type="submit" id="btn-cadastra-conta"class="btn btn-primary">Cadastrar</button>
                     </div>
                 </form>
             </div>
@@ -123,33 +102,114 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous">
     </script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="jquery.mask.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+
     <script>
-
-
     $(document).ready(function(){
         $("#agencia").mask("9999");
         $("#conta").mask("99999999999-9", {reverse: true});
+        // getQtdContas();
+        getContas();
         $.ajax({type: 'GET',
             url: "http://localhost:8080/bancos", 
             success: function(result){  
-                $("#inputConta").empty();  
-                $("#inputConta").append('Selecione');
+                $("#banco").empty();  
+                $("#banco").append('Selecione');
                 result.forEach(banco => {
-                    $("#inputConta").append('<option id="'+banco.codigo+'">'+banco.banco+'</option>');
+                    $("#banco").append('<option id="'+banco.codigo+'" value="'+banco.codigo+'">'+banco.banco+'</option>');
                 });
             },
             error: function(result){
                 alert('ocorreu um erro ao buscar os bancos para cadastro');
             }
         });
-    })
+    });
+
+     function getQtdContas() {
+        $.ajax({type: 'GET',
+            url: "http://localhost:8080/qtd-contas", 
+            success: function(result){ 
+                var jsonRetorno = JSON.parse(result);
+                if(jsonRetorno.qtdContas <= 3){
+                    $("#limiteQtdContas").removeClass("alert alert-danger").addClass("none");
+                }
+            },
+            error: function(result){
+                alert('ocorreu um erro ao buscar a quantidade de conta do cliente.');
+            }
+        });
+    }
+
+    function getContas() {$.ajax({type: 'GET',
+            url: "http://localhost:8080/contas", 
+            success: function(result){ 
+                result.forEach(function(conta){
+                    var linha = '<tr id="'+conta.id+'">'+
+                            '<td>'+(conta.principal == true ? 'Sim' : 'Não')+'</td>'+
+                            '<td>'+conta.codigoBanco.banco.substring(5,150)+'</td>'+
+                            '<td>'+conta.codigoAgencia+'</td>'+
+                            '<td class="contaBanco">'+conta.codigoConta+'</td>'+
+                            '<td><button type="button" id="excluir" class="btn btn-danger">excluir</button></td>'+
+                        '</tr>'
+                    $("#tableBody").append(linha);
+                })
+                $(".contaBanco").mask("99999999999-9", {reverse: true});
+            },
+            error: function(result){
+                alert('ocorreu um erro ao buscar as contas!');
+            }
+    });}
+
+    function saveConta(json) {
+            $.ajax({type: 'POST',
+            contentType: 'application/json',
+            url: "http://localhost:8080/contas",
+            data: json,
+            success: function(result){ 
+                document.location.reload(true);
+            },
+            error: function(result){
+                alert(result.message);
+            }
+    });}
+
+    $("#form-conta").submit(function(event){
+
+        event.preventDefault();
+
+        var jsonForm = ($("#form-conta").serializeArray());
+
+        var request = {
+            codigoBanco: {
+                codigo: 0
+            },
+            idCliente: {
+                id: 1
+            },
+            codigoAgencia:0,
+            codigoConta:0,
+            principal: false 
+        };
+    jsonForm.forEach(function(campo){
+            if(campo.name == 'banco') {
+                request.codigoBanco.codigo = campo.value;
+            }
+            if(campo.name == 'agencia') {
+                request.codigoAgencia = campo.value;
+            }
+            if(campo.name == 'conta') {
+                var numeroConta = campo.value.replace('-','');
+                request.codigoConta = numeroConta;
+            }
+            if(campo.name == 'checkConta') {
+                request.principal = true;
+            }
+        });
+
+        saveConta(JSON.stringify(request))
+    });
     </script>
-    <!-- Option 2: jQuery, Popper.js, and Bootstrap JS
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s" crossorigin="anonymous"></script>
-    -->
+    
 </body>
 
 </html>
