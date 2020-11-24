@@ -14,7 +14,9 @@ CREATE TABLE endereco(
 	bairro VARCHAR(100),
 	UF VARCHAR(2),
 	numero int,
-	complemento VARCHAR(100)
+	complemento VARCHAR(100),
+	cep VARCHAR(8),
+	cidade VARCHAR(100)
 )
 
 CREATE TABLE cliente(
@@ -23,6 +25,9 @@ CREATE TABLE cliente(
 	id_endereco INT,
 	nome VARCHAR(255),
 	data_nascimento DATE,
+	email VARCHAR(100),
+	telefone VARCHAR(20),
+	sexo VARCHAR(1),
 	FOREIGN KEY (id_endereco) REFERENCES endereco(id)
 )
 

@@ -32,7 +32,7 @@ public class FuncoesTelaController {
 	}
 	
 	@GetMapping("/qtd-contas")
-	public ResponseEntity<?> buscaQuantidadeContas(){
+	public ResponseEntity<?> buscaQuantidadeContas(){	
 		String jsonRetorno = "{\"qtdContas\":"+bancosRepository.findTotalContas()+"}";
 		return ResponseEntity.ok(jsonRetorno);
 	}

@@ -47,7 +47,7 @@ public class OrdemService {
 		return ordemCriada;
 	}
 
-	@Scheduled(cron = "0/3 * * * * *")
+	/*@Scheduled(cron = "0/3 * * * * *")
 	private void executaOrdem() {
 		log.info("Iniciando executaOrdem() - OrdemService");
 		List<Ordem> ordensAguardando = ordemRepository.findAllByStatusOrdem("A");
@@ -60,7 +60,7 @@ public class OrdemService {
 		});
 		ordemRepository.saveAll(ordensAguardando);
 		log.info("Finalizando executaOrdem() - OrdemService");
-	}
+	}*/
 
 	private void executaVenda(Ordem ordem) {
 		Optional<ContaSimply> conta = contaSimplyRepository.findById(ordem.getContaSimply().getId());

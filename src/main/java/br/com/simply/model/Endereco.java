@@ -36,5 +36,11 @@ public class Endereco {
 	
 	@Column(name="complemento")
 	private String complemento;
+	
+	@Column(name="cidade")
+	private String cidade;
+	
+	@Column(name="cep")
+	private String cep;
 
 }

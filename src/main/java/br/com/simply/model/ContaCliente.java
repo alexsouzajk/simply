@@ -1,5 +1,6 @@
 package br.com.simply.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -28,7 +29,7 @@ public class ContaCliente {
 	@JoinColumn(name="cod_banco")
 	private BancosEntity codigoBanco;
 	
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name="id_cliente")
 	private Cliente idCliente;
 	
