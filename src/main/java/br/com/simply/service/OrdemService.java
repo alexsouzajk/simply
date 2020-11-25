@@ -1,6 +1,9 @@
 package br.com.simply.service;
 
 import java.math.BigDecimal;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,7 +40,7 @@ public class OrdemService {
 		
 		ordem.setValorOrdem(valorOrdem);
 		ordem.setStatusOrdem("A");
-		if (conta.get().getSaldo().doubleValue() < valorOrdem.doubleValue()
+		if (ordem.getTipo().equals("C") && conta.get().getSaldo().doubleValue() < valorOrdem.doubleValue()
 				/*|| (conta.get().getSaldo().doubleValue() - ordem.getValorOrdem().doubleValue()) >= 0*/) {
 			throw new BusinessException("Saldo insulficiente!");
 		}
@@ -47,7 +50,7 @@ public class OrdemService {
 		return ordemCriada;
 	}
 
-	/*@Scheduled(cron = "0/3 * * * * *")
+	@Scheduled(cron = "0/3 * * * * *")
 	private void executaOrdem() {
 		log.info("Iniciando executaOrdem() - OrdemService");
 		List<Ordem> ordensAguardando = ordemRepository.findAllByStatusOrdem("A");
@@ -60,7 +63,7 @@ public class OrdemService {
 		});
 		ordemRepository.saveAll(ordensAguardando);
 		log.info("Finalizando executaOrdem() - OrdemService");
-	}*/
+	}
 
 	private void executaVenda(Ordem ordem) {
 		Optional<ContaSimply> conta = contaSimplyRepository.findById(ordem.getContaSimply().getId());
@@ -84,5 +87,17 @@ public class OrdemService {
 			ordem.setStatusOrdem("R");
 		}
 		contaSimplyRepository.save(conta.get());
+	}
+
+	public List<Ordem> buscarPorDataEntre(Integer quantidadeDias) {
+		GregorianCalendar c = new GregorianCalendar();
+
+		Date dataAtual = new Date();
+		
+		c.add(Calendar.DAY_OF_MONTH, -quantidadeDias);
+		
+		Date dataInicial = c.getTime();
+
+		return ordemRepository.findAllByDataBetween(dataInicial, dataAtual);
 	}
 }

@@ -12,6 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -45,6 +47,7 @@ public class ContaSimply {
 	private BigDecimal saldo;
 	
 	@Column(name="data_saldo")
+	@JsonFormat(pattern="dd/MM/yyyy")
 	private Date dataSaldo;
 	
 	
